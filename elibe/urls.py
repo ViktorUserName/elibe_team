@@ -34,6 +34,7 @@ router.register(r'author', AuthorViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+        path('external-books/', include('external_books.urls')),
     path('api/', include(router.urls)),
     path('', include('bookmark.urls')),
     path('test/me/', UserMeView.as_view(), name='user-me'),

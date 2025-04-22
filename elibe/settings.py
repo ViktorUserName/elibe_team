@@ -19,7 +19,8 @@ INSTALLED_APPS = [
     'book',
     'author',
     'genres.apps.GenresConfig',
-    'bookmark.apps.BookmarkConfig'
+    'bookmark.apps.BookmarkConfig',
+    'external_books',
 ]
 
 REST_FRAMEWORK = {
