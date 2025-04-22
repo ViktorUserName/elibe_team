@@ -5,4 +5,10 @@ class Author(models.Model):
     last_name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name
+        return f"{self.last_name} {self.first_name}"
+
+    class Meta:
+        verbose_name = "Автор"
+        verbose_name_plural = "Авторы"
+        ordering = ['last_name', 'first_name']
+        unique_together = ['first_name', 'last_name']

@@ -2,17 +2,23 @@ from rest_framework import serializers
 
 from author.models import Author
 from author.serializers import AuthorSerializer
+from genres.models import Genre
 from genres.serializers import GenresSerializer
 from .models import Book
 
-class BookSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True, many=True)
-    genres = GenresSerializer(read_only=True, many=True)
+class BookReadSerializer(serializers.ModelSerializer):
+    authors = AuthorSerializer(many=True, read_only=True)
+    genres = GenresSerializer(many=True, read_only=True)
 
     class Meta:
         model = Book
-        fields = ('title', 'content', 'author', 'genres')
+        fields = ('title', 'content', 'authors', 'genres')
         read_only_fields = ('id',)
 
-    def perform_delete(self):
-        pass
+class BookCreateSerializer(serializers.ModelSerializer):
+    authors = serializers.PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
+    genres = serializers.PrimaryKeyRelatedField(many=True, queryset=Genre.objects.all())
+
+    class Meta:
+        model = Book
+        fields = ('title', 'content', 'authors', 'genres')

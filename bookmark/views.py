@@ -2,7 +2,6 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from book.models import Book
-from book.serializers import BookSerializer
 from bookmark.models import Bookmark
 from bookmark.serializers import BookmarkSerializer
 

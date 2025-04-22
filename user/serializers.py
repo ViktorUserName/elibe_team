@@ -3,16 +3,13 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError as DjangoValidationError
 
-from bookmark.serializers import BookmarkSerializer
-
 User = get_user_model()
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    bookmark = BookmarkSerializer(read_only=True, many=True)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'role', 'bookmark')
+        fields = ('username', 'email', 'role')
         read_only_fields = ('role', 'id')
         extra_kwargs = {'password': {'write_only': True}}
 
