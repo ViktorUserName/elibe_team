@@ -3,8 +3,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
+from rest_framework import serializers
 
-from .serializers import CustomUserSerializer
+from author import serializers
+from .serializers import CustomUserSerializer, UserReadSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
@@ -12,6 +14,27 @@ User = get_user_model()
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
+
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     user = serializer.save()
+    #
+    #     refresh = RefreshToken.for_user(user)
+    #     access = refresh.access_token
+    #
+    #     return Response({
+    #         "user": {
+    #             "id": user.id,
+    #             "username": user.username,
+    #             "email": user.email,
+    #             "role": user.role,
+    #         },
+    #         "tokens": {
+    #             "refresh": str(refresh),
+    #             "access": str(access),
+    #         }
+    #     }, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
         user = serializer.save()
@@ -26,5 +49,9 @@ class UserMeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = CustomUserSerializer(request.user)
-        return Response(serializer.data)
+        try:
+            serializer = UserReadSerializer(request.user)
+            # serializer = CustomUserSerializer(request.user)
+            return Response(serializer.data)
+        except serializers.ValidationError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

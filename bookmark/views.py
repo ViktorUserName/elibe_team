@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, serializers
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from bookmark.models import Bookmark
@@ -18,4 +18,6 @@ class BookmarkViewSet(viewsets.ModelViewSet):
         return BookmarkWriteSerializer
 
     def perform_create(self, serializer):
+        if Bookmark.objects.filter(user=self.request.user, book=serializer.validated_data['book']).exists():
+            raise serializers.ValidationError('This bookmark is already in this bookmark')
         serializer.save(user=self.request.user)

@@ -12,7 +12,7 @@ class BookReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ('title', 'content', 'authors', 'genres')
+        fields = ('id','title', 'content', 'authors', 'genres')
         read_only_fields = ('id',)
 
 class BookCreateSerializer(serializers.ModelSerializer):
